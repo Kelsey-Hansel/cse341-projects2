@@ -20,7 +20,7 @@ const getOneBook = async (req, res) => {
     });
 };
 
-const createbook = async (req, res) => {
+const createBook = async (req, res) => {
     //#swagger.tags=['Books']
     const book = {
         bookTitle: req.body.bookTitle,
@@ -39,7 +39,7 @@ const createbook = async (req, res) => {
     }
 };
 
-const updatebook = async (req, res) => {
+const updateBook = async (req, res) => {
     //#swagger.tags=['Books']
     const bookId = new ObjectId(req.params.id); 
     const book = {
@@ -59,7 +59,7 @@ const updatebook = async (req, res) => {
     }
 };
 
-const deletebook = async (req, res) => {
+const deleteBook = async (req, res) => {
     //#swagger.tags=['Books']
     const bookId = new ObjectId(req.params.id); 
     const response = await mongodb.getDatabase().db('project2').collection('books').deleteOne({ _id: bookId });
@@ -70,4 +70,4 @@ const deletebook = async (req, res) => {
     }
 };
 
-module.exports = { getAllBooks, getOneBook, createbook, updatebook, deletebook };
+module.exports = { getAllBooks, getOneBook, createBook, updateBook, deleteBook };
