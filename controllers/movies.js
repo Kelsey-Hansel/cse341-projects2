@@ -3,8 +3,10 @@ const ObjectId = require('mongodb').ObjectId;
 
 const getAllMovies = async (req, res) => {
     //#swagger.tags=['Movies']
-    const result = await mongodb.getDatabase().db('project2').collection('movies').find();
-    result.toArray().then((movies) => {
+    mongodb.getDatabase().db('project2').collection('movies').find().toArray((err, movies) => {
+        if (err) {
+            res.status(400).json({ message: error });
+        }
         res.setHeader('Content-Type', 'application/json');
         res.status(200).json(movies);
     });
@@ -13,8 +15,10 @@ const getAllMovies = async (req, res) => {
 const getOneMovie = async (req, res) => {
     //#swagger.tags=['Movies']
     const movieId = new ObjectId(req.params.id);
-    const result = await mongodb.getDatabase().db('project2').collection('movies').find({ _id: movieId });
-    result.toArray().then((movies) => {
+    mongodb.getDatabase().db('project2').collection('movies').find({_id: movieId}).toArray((err, movies) => {
+        if (err) {
+            res.status(400).json({ message: error });
+        }
         res.setHeader('Content-Type', 'application/json');
         res.status(200).json(movies[0]);
     });
