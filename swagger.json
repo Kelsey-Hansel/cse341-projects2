@@ -5,11 +5,8 @@
     "description": "Books and Movies API",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "project2-b6uu.onrender.com",
   "basePath": "/",
-  "schemes": [
-    "http"
-  ],
   "paths": {
     "/": {
       "get": {
