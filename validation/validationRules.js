@@ -12,7 +12,7 @@ const checkBook = (req, res, next) => {
     };
     validator(req.body, bookRules, {}, (err, status) => {
         if (!status) {
-            res.statuts(412).send({
+            res.status(412).send({
                 success: false,
                 message: 'Validation failed',
                 data: err
@@ -33,7 +33,7 @@ const checkMovie = (req, res, next) => {
     };
     validator(req.body, movieRules, {}, (err, status) => {
         if (!status) {
-            res.statuts(412).send({
+            res.status(412).send({
                 success: false,
                 message: 'Validation failed',
                 data: err
