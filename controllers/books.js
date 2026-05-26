@@ -4,13 +4,11 @@ const ObjectId = require('mongodb').ObjectId;
 const getAllBooks = async (req, res) => {
     //#swagger.tags=['Books']
     try {
-        mongodb.getDatabase().db('project2').collection('books').find().toArray((err, books) => {
-            
-            res.setHeader('Content-Type', 'application/json');
-            res.status(200).json(books);
-        });
+        const books = await mongodb.getDatabase().db('project2').collection('books').find().toArray(); 
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json(books);
     } catch (err) {
-        res.status(400).json({ message: error });
+        res.status(400).json({ message: err });
     }
 };
 
@@ -18,15 +16,14 @@ const getOneBook = async (req, res) => {
     //#swagger.tags=['Books']
     try {
         if (!ObjectId.isValid(req.params.id)) {
-            res.status(400).json('Must use a valid ID.');
-        };
+            return res.status(400).json('Must use a valid ID.');
+        }
         const bookId = new ObjectId(req.params.id);
-        mongodb.getDatabase().db('project2').collection('books').find({_id: bookId}).toArray((err, books) => {
-            res.setHeader('Content-Type', 'application/json');
-            res.status(200).json(books[0]);
-        });
+        const books = await mongodb.getDatabase().db('project2').collection('books').find({ _id: bookId }).toArray();
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json(books[0]);
     } catch (err) {
-        res.status(400).json({ message: error });
+        res.status(400).json({ message: err });
     }
         
 };
@@ -53,8 +50,8 @@ const createBook = async (req, res) => {
 const updateBook = async (req, res) => {
     //#swagger.tags=['Books']
     if (!ObjectId.isValid(req.params.id)) {
-        res.status(400).json('Must use a valid ID.');
-    };
+        return res.status(400).json('Must use a valid ID.');
+    }
     const bookId = new ObjectId(req.params.id); 
     const book = {
         bookTitle: req.body.bookTitle,
@@ -76,8 +73,8 @@ const updateBook = async (req, res) => {
 const deleteBook = async (req, res) => {
     //#swagger.tags=['Books']
     if (!ObjectId.isValid(req.params.id)) {
-        res.status(400).json('Must use a valid ID.');
-    };
+        return res.status(400).json('Must use a valid ID.');
+    }
     const bookId = new ObjectId(req.params.id); 
     const response = await mongodb.getDatabase().db('project2').collection('books').deleteOne({ _id: bookId });
     if (response.deletedCount > 0) {

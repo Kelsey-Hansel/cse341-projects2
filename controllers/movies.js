@@ -4,10 +4,9 @@ const ObjectId = require('mongodb').ObjectId;
 const getAllMovies = async (req, res) => {
     //#swagger.tags=['Movies']
     try {
-        mongodb.getDatabase().db('project2').collection('movies').find().toArray((err, movies) => {
-            res.setHeader('Content-Type', 'application/json');
-            res.status(200).json(movies);
-        });
+        const movies = await mongodb.getDatabase().db('project2').collection('movies').find().toArray();
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json(movies);
     } catch (err) {
         res.status(400).json({ message: error });
     }
@@ -18,13 +17,12 @@ const getOneMovie = async (req, res) => {
     //#swagger.tags=['Movies']
     try {
         if (!ObjectId.isValid(req.params.id)) {
-            res.status(400).json('Must use a valid ID.');
-        };
+            return res.status(400).json('Must use a valid ID.');
+        }
         const movieId = new ObjectId(req.params.id);
-        mongodb.getDatabase().db('project2').collection('movies').find({_id: movieId}).toArray((err, movies) => {
-            res.setHeader('Content-Type', 'application/json');
-            res.status(200).json(movies[0]);
-        });
+        const movies = await mongodb.getDatabase().db('project2').collection('movies').find({ _id: movieId }).toArray();
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).json(movies[0]);
     } catch (err) {
         res.status(400).json({ message: error });
     }
@@ -50,8 +48,8 @@ const createMovie = async (req, res) => {
 const updateMovie = async (req, res) => {
     //#swagger.tags=['Movies']
     if (!ObjectId.isValid(req.params.id)) {
-        res.status(400).json('Must use a valid ID.');
-    };
+        return res.status(400).json('Must use a valid ID.');
+    }
     const movieId = new ObjectId(req.params.id); 
     const movie = {
         title: req.body.title,
@@ -71,8 +69,8 @@ const updateMovie = async (req, res) => {
 const deleteMovie = async (req, res) => {
     //#swagger.tags=['Movies']
     if (!ObjectId.isValid(req.params.id)) {
-        res.status(400).json('Must use a valid ID.');
-    };
+        return res.status(400).json('Must use a valid ID.');
+    }
     const movieId = new ObjectId(req.params.id); 
     const response = await mongodb.getDatabase().db('project2').collection('movies').deleteOne({ _id: movieId });
     if (response.deletedCount > 0) {
